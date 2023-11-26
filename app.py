@@ -21,10 +21,6 @@ def index():
 def hello():
     return jsonify({'mensaje': 'vista Hello'})
 
-@app.route('/user/<nombre>')
-def user(nombre):
-    return jsonify({'nombre': 'el usuario se llama {nombre}'})
-
 if __name__ == '__main__':
     app.register_blueprint(users)
     app.register_blueprint(establecimientos)
