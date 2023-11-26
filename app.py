@@ -15,9 +15,12 @@ def index():
         return jsonify({'metodo': 'POST'})
     else:
         return jsonify({'metodo': request.method})
+    
 
 if __name__ == '__main__':
     app.register_blueprint(establecimientos)
     app.register_blueprint(users)
     app.register_blueprint(empleados)
     app.run(debug=True)
+   
+    

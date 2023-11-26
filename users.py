@@ -1,9 +1,9 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from database import obtener_conexion
 
 users = Blueprint('users', __name__)
 
-@users.route('/users', methods=['GET'])
+@users.route('/users', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def users_route():
     try:
         # Obtener una conexión
