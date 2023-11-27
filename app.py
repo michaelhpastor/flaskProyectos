@@ -25,7 +25,7 @@ def hash_password(password):
 
 
 #----------------------------------------------------------------------------------------------------------- AUTH
-@app.route('/auth/', methods=['POST'])
+@app.route('/auth', methods=['POST'])
 def auth_route():
     user_data = request.json
     correo = user_data.get('correo')
