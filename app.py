@@ -18,15 +18,15 @@ def index():
         return jsonify({'metodo': request.method})
     
 
-@app.route('/empleados')
-def empleados():
+@app.route('/empleados/<id>')
+def empleados(id):
     try:
         # Obtener una conexión
         connection = obtener_conexion()
 
         with connection.cursor() as cursor:
             # Ejecutar una consulta para obtener datos de la base de datos
-            cursor.execute("SELECT * FROM empleados")
+            cursor.execute("SELECT * FROM empleados  WHERE idEstablecimiento = %s", (id,))
             data = cursor.fetchall()
 
         # Convertir los resultados a un formato JSON y retornarlos
@@ -62,7 +62,7 @@ def establecimientos():
 if __name__ == '__main__':
     #app.register_blueprint(establecimientos)
     #app.register_blueprint(users)
-    app.register_blueprint(empleados)
+    #app.register_blueprint(empleados)
     app.run(debug=True)
    
     
