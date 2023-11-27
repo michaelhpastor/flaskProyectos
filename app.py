@@ -2,8 +2,10 @@ from flask import Flask, jsonify, request
 from empleados import empleados
 from database import obtener_conexion
 from database import create_app
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 create_app(app)
 
 @app.route('/', methods=['GET', 'POST', 'PUT', 'DELETE'])
