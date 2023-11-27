@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, request
-from establecimientos import establecimientos
 from empleados import empleados
-from users import users
+from database import obtener_conexion
 from database import create_app
 
 app = Flask(__name__)
@@ -17,9 +16,29 @@ def index():
         return jsonify({'metodo': request.method})
     
 
+@app.route('/establecimientos')
+def establecimientos():
+    try:
+        # Obtener una conexión
+        connection = obtener_conexion()
+
+        with connection.cursor() as cursor:
+            # Ejecutar una consulta para obtener datos de la base de datos
+            cursor.execute("SELECT * FROM establecimientos")
+            data = cursor.fetchall()
+
+        # Convertir los resultados a un formato JSON y retornarlos
+        result = jsonify(data)
+        return result
+    except Exception as e:
+        return str(e)
+    finally:
+        # Cerrar la conexión después de usarla
+        connection.close()
+
 if __name__ == '__main__':
-    app.register_blueprint(establecimientos)
-    app.register_blueprint(users)
+    #app.register_blueprint(establecimientos)
+    #app.register_blueprint(users)
     app.register_blueprint(empleados)
     app.run(debug=True)
    
