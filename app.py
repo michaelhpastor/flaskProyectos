@@ -25,9 +25,11 @@ def hash_password(password):
 
 
 #----------------------------------------------------------------------------------------------------------- AUTH
-@app.route('/auth/<correo>/<contrasena>', methods=['GET'])
-def auth_route(correo,contrasena):
-
+@app.route('/auth/', methods=['POST'])
+def auth_route():
+    user_data = request.json
+    correo = user_data.get('correo')
+    contrasena = user_data.get('contrasena')
     try:
         # Obtener una conexión
         connection = obtener_conexion()
