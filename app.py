@@ -347,7 +347,7 @@ def agendaEmpleados_route(idempleado,idUsuario):
 
         if request.method == 'GET':
             with connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM agendaEmpleados WHERE idempleado = %s AND idUsuario = %s", (idempleado,idUsuario))
+                cursor.execute("SELECT * FROM agendaEmpleados WHERE idempleado = %s", (idempleado))
                 data = cursor.fetchall()
             result = jsonify(data)
             return result
@@ -361,7 +361,7 @@ def agendaEmpleados_route(idempleado,idUsuario):
 
             with connection.cursor() as cursor:
                 # Ejecutar la consulta para insertar un nuevo usuario
-                cursor.execute("INSERT INTO agendaEmpleados (idempleado, idUsuario, fecha, hora) VALUES (%s, %s, %s, %s)", (2, 2, fecha, hora))
+                cursor.execute("INSERT INTO agendaEmpleados (idempleado, idUsuario, fecha, hora) VALUES (%s, %s, %s, %s)", (idempleado, idUsuario, fecha, hora))
                 connection.commit()
 
             return jsonify({"message": "La agenda de empleados creada exitosamente"}), 201
