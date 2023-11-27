@@ -41,11 +41,15 @@ def auth_route():
                 cursor.execute("SELECT * FROM usuarios WHERE correo = %s AND contrasena = %s", (correo,hashed_password))
                 data = cursor.fetchall()
 
-        print(len(data))
+
         if len(data) == 1:
-            return 'usuario'
+            return jsonify({
+                'id': data[0]['id']
+                })
         elif len(data) == 0:
-            return ''
+            return jsonify({
+                'id': 0
+                })
     
     except Exception as e:
         return jsonify({"error": str(e)}), 500
