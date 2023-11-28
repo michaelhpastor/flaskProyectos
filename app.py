@@ -66,7 +66,7 @@ def agendaUsuarios_route(id):
         connection = obtener_conexion()
 
         with connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM agendaEmpleados, agendaEspecialista WHERE idUsuario = %s ", (id))
+                cursor.execute("SELECT agendaEmpleados.idEmpleado, agendaEmpleados.fecha, agendaEmpleados.hora, agendaEmpleados.servicio, agendaEspecialista.idEspecialista, agendaEspecialista.fecha, agendaEspecialista.hora, agendaEspecialista.lugar, agendaEspecialista.servicio FROM agendaEmpleados, agendaEspecialista WHERE agendaEmpleados.idUsuario = %s OR agendaEspecialista.idUsuario = %s", (id, id))
                 data = cursor.fetchall()
         result = jsonify(data)
         return result
@@ -356,12 +356,13 @@ def agendaEmpleados_route(idempleado,idUsuario):
             agendaEmpleados_data = request.json
             fecha = agendaEmpleados_data.get('fecha')
             hora = agendaEmpleados_data.get('hora')
+            servicio = agendaEmpleados_data.get('servicio')
                      
             # Agregar lógica para otros campos del usuario según tu esquema de base de datos
 
             with connection.cursor() as cursor:
                 # Ejecutar la consulta para insertar un nuevo usuario
-                cursor.execute("INSERT INTO agendaEmpleados (idempleado, idUsuario, fecha, hora) VALUES (%s, %s, %s, %s)", (idempleado, idUsuario, fecha, hora))
+                cursor.execute("INSERT INTO agendaEmpleados (idempleado, idUsuario, fecha, hora, servicio) VALUES (%s, %s, %s, %s, %s)", (idempleado, idUsuario, fecha, hora, servicio))
                 connection.commit()
 
             return jsonify({"message": "La agenda de empleados creada exitosamente"}), 201
@@ -404,7 +405,7 @@ def agendaEspecialista_route(idEspecialista,idUsuario):
 
         if request.method == 'GET':
             with connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM agendaEspecialista WHERE idEspecialista = %s AND idUsuario = %s", (idEspecialista,idUsuario))
+                cursor.execute("SELECT * FROM agendaEspecialista WHERE idEspecialista = %s", (idEspecialista))
                 data = cursor.fetchall()
             result = jsonify(data)
             return result
@@ -414,12 +415,13 @@ def agendaEspecialista_route(idEspecialista,idUsuario):
             fecha = agendaEspecialista_data.get('fecha')
             hora = agendaEspecialista_data.get('hora')
             lugar = agendaEspecialista_data.get('lugar')
+            servicio = agendaEspecialista_data.get('servicio')
             
             # Agregar lógica para otros campos del usuario según tu esquema de base de datos
 
             with connection.cursor() as cursor:
                 # Ejecutar la consulta para insertar un nuevo usuario
-                cursor.execute("INSERT INTO agendaEspecialista (idEspecialista, idUsuario, fecha, hora, lugar) VALUES (%s, %s, %s, %s, %s)", (2, 2, fecha, hora, lugar))
+                cursor.execute("INSERT INTO agendaEspecialista (idEspecialista, idUsuario, fecha, hora, lugar, servicio) VALUES (%s, %s, %s, %s, %s, %s)", (idEspecialista, idUsuario, fecha, hora, lugar, servicio))
                 connection.commit()
 
             return jsonify({"message": "La agenda del especialista creada exitosamente"}), 201
