@@ -87,7 +87,8 @@ def agendaUsuariosEmp_route(id):
                         'nombre_establecimiento': establecimiento_info['nombre'],
                         'imagen_establecimiento': establecimiento_info['imagen'],
                         'fecha': row['fecha'],
-                        'hora': row['hora']
+                        'hora': row['hora'],
+                        'servicio': row['servicio']
                     }
 
                     resultados.append(resultado_combinado)
@@ -128,7 +129,8 @@ def agendaUsuariosEsp_route(id):
                         'imagen_especialista': especialista_info['imagen'],
                         'fecha': row['fecha'],
                         'hora': row['hora'],
-                        'lugar': row['lugar']
+                        'lugar': row['lugar'],
+                        'servicio': row['servicio']
                     }
 
                     resultados.append(resultado_combinado)
