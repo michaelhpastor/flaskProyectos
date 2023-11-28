@@ -57,16 +57,16 @@ def auth_route():
         connection.close()
 
 
-#----------------------------------------------------------------------------------------------------------- RUTA AGENDA USUARIOS
-@app.route('/agendaUsuario/<id>', methods=['GET'])
-def agendaUsuarios_route(id):
+#----------------------------------------------------------------------------------------------------------- RUTA AGENDA USUARIOS EMPLEADOS
+@app.route('/agendaUsuarioEmp/<id>', methods=['GET'])
+def agendaUsuariosEmp_route(id):
 
     try:
         # Obtener una conexión
         connection = obtener_conexion()
 
         with connection.cursor() as cursor:
-                cursor.execute("SELECT agendaEmpleados.idEmpleado, agendaEmpleados.fecha, agendaEmpleados.hora, agendaEmpleados.servicio, agendaEspecialista.idEspecialista, agendaEspecialista.fecha, agendaEspecialista.hora, agendaEspecialista.lugar, agendaEspecialista.servicio FROM agendaEmpleados, agendaEspecialista WHERE agendaEmpleados.idUsuario = %s OR agendaEspecialista.idUsuario = %s", (id, id))
+                cursor.execute("SELECT * FROM agendaEmpleados WHERE idUsuario = %s", (id))
                 data = cursor.fetchall()
         result = jsonify(data)
         return result
@@ -76,6 +76,25 @@ def agendaUsuarios_route(id):
     finally:
         connection.close()
 
+
+#----------------------------------------------------------------------------------------------------------- RUTA AGENDA USUARIOS ESPECIALISTAS
+@app.route('/agendaUsuarioEsp/<id>', methods=['GET'])
+def agendaUsuariosEsp_route(id):
+
+    try:
+        # Obtener una conexión
+        connection = obtener_conexion()
+
+        with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM agendaEspecialista WHERE idUsuario = %s", (id))
+                data = cursor.fetchall()
+        result = jsonify(data)
+        return result
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        connection.close()
 
 #----------------------------------------------------------------------------------------------------------- RUTA USUARIOS
 @app.route('/users', methods=['GET', 'POST', 'PUT', 'DELETE'])
