@@ -68,8 +68,32 @@ def agendaUsuariosEmp_route(id):
         with connection.cursor() as cursor:
                 cursor.execute("SELECT * FROM agendaEmpleados WHERE idUsuario = %s", (id))
                 data = cursor.fetchall()
-        result = jsonify(data)
-        return result
+
+                resultados = []
+
+                for row in data:
+                            # Obtener el nombre del empleado
+                    cursor.execute("SELECT idEstablecimiento, nombre, imagen FROM empleados WHERE id = %s", (row['idempleado']))
+                    empleado_info = cursor.fetchone()
+                        # Obtener información del establecimiento
+                    cursor.execute("SELECT nombre, imagen FROM establecimientos WHERE id = %s", (empleado_info['idEstablecimiento']))
+                    establecimiento_info = cursor.fetchone()
+
+                            # Combinar los resultados
+                    resultado_combinado = {
+                        'id': row['id'],
+                        'nombre_empleado': empleado_info['nombre'],
+                        'imagen_empleado': empleado_info['imagen'],
+                        'nombre_establecimiento': establecimiento_info['nombre'],
+                        'imagen_establecimiento': establecimiento_info['imagen'],
+                        'fecha': row['fecha'],
+                        'hora': row['hora']
+                    }
+
+                    resultados.append(resultado_combinado)
+
+                # Convertir los resultados a un formato JSON y retornarlos
+        return jsonify(resultados)
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -88,8 +112,28 @@ def agendaUsuariosEsp_route(id):
         with connection.cursor() as cursor:
                 cursor.execute("SELECT * FROM agendaEspecialista WHERE idUsuario = %s", (id))
                 data = cursor.fetchall()
-        result = jsonify(data)
-        return result
+
+                resultados = []
+
+                print(data[0]['idEspecialista'])
+                for row in data:
+                    # Obtener el nombre del empleado
+                    cursor.execute("SELECT nombre, imagen FROM especialistas WHERE id = %s", (row['idEspecialista']))
+                    especialista_info = cursor.fetchone()
+
+                    # Combinar los resultados
+                    resultado_combinado = {
+                        'id': row['id'],
+                        'nombre_especialista': especialista_info['nombre'],
+                        'imagen_especialista': especialista_info['imagen'],
+                        'fecha': row['fecha'],
+                        'hora': row['hora'],
+                        'lugar': row['lugar']
+                    }
+
+                    resultados.append(resultado_combinado)
+        
+        return jsonify(resultados)
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
